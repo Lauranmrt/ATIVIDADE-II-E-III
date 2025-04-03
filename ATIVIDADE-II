@@ -1,0 +1,50 @@
+# ATIVIDADE 1 - Desenvolva um algoritmo que solicite ao usuário um número inteiro e verifique se o número digitado é par. 
+# Se o número for ímpar, levante uma exceção personalizada com uma mensagem de erro apropriada. Em seguida, 
+# imprima uma mensagem informando que o número digitado é par.
+
+numero = int(input("Digite um número inteiro: "))
+
+if (numero % 2 > 0) or (numero % 2 < 0):
+    print(f"Erro. Número {numero} é ímpar.")
+
+else:
+    print(f"O número {numero} é par.")
+
+
+# ATIVADADE 2- Desenvolva um algoritmo que solicite ao usuário que digite uma string e verifique se a string contém apenas 
+# letras maiúsculas. Se a string contiver letras minúsculas, levante uma exceção embutida com uma mensagem de erro apropriada. 
+# Em seguida, imprima uma mensagem informando que a string contém apenas letras maiúsculas.
+
+string = str(input("Digite uma palavra: "))
+
+if string == string.upper():
+    print(f"A palavra {string} está toda maiúscula.")
+elif string == string.lower():
+    print(f"A palavra {string} está toda minúscula.")
+elif (string != string.upper()) and (string != string.lower()):
+    print(f"A palavra {string} tem letra minúscula e maiúscula.")
+
+# ATIVIDADE 3- Desenvolva um algoritmo que solicite ao usuário que digite um número inteiro e divida 10 pelo número digitado. 
+# Se o número digitado for 0, levante uma exceção embutida com uma mensagem de erro apropriada. Em seguida, 
+# imprima o resultado da divisão.
+
+nmr = int(input("Digite um número inteiro: "))
+
+if nmr == 0:
+    print("Erro. Número é igual à zero.")
+
+else:
+    nmr1 = nmr / 10
+    print(f"O resultado da divisão do número {nmr} por 10, é: {nmr1:.2f}.")
+
+# ATIVIDADE 4 - Desenvolva um algoritmo que solicite ao usuário que digite duas strings e verifique se as strings têm o mesmo 
+# comprimento. Se as strings tiverem comprimentos diferentes, levante uma exceção personalizada com uma mensagem de erro 
+# apropriada. Em seguida, imprima uma mensagem informando que as strings têm o mesmo comprimento.
+
+string1, string2 = str(input("Digite duas palavras, espaçando com ' ': ")).split()
+
+if len(string1) == len(string2):
+    print("O comprimento das duas palavras é igual.")
+
+elif len(string1) != len(string2):
+    print("Os comprimentos das palavras são diferentes.")
