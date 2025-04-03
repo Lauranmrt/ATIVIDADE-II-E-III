@@ -1,0 +1,175 @@
+import pandas as pd
+
+def salvar_em_planilha(nome_arquivo, dados):
+    try:
+        df = pd.DataFrame(dados)
+        df.to_excel(nome_arquivo, index=False)
+        print(f"Arquivo {nome_arquivo} salvo com sucesso!")
+    except Exception as e:
+        print(f"Erro ao salvar o arquivo {nome_arquivo}: {e}")
+
+def ler_planilha(nome_arquivo):
+    try:
+        df = pd.read_excel(nome_arquivo)
+        print(f"Arquivo {nome_arquivo} lido com sucesso!")
+        return df
+    except FileNotFoundError:
+        print(f"O arquivo {nome_arquivo} não foi encontrado. Criando um novo arquivo.")
+        return pd.DataFrame()
+    except Exception as e:
+        print(f"Erro ao ler o arquivo {nome_arquivo}: {e}")
+        return pd.DataFrame()
+
+def calcular_media(nota1, nota2, nota3):
+    try:
+        return (float(nota1) + float(nota2) + float(nota3)) / 3
+    except ValueError:
+        print("Erro ao calcular a média: as notas devem ser números.")
+        return 0
+
+def adicionar_aluno():
+    nome = input("Informe seu nome: ")
+    while True:
+        try:
+            n1 = float(input("Informe a N1: "))
+            n2 = float(input("Informe a N2: "))
+            n3 = float(input("Informe a N3: "))
+            break
+        except ValueError:
+            print("Por favor, insira um valor numérico válido para as notas.")
+    
+    dados = ler_planilha('notas.xlsx')
+    
+    if dados.empty:
+        dados = pd.DataFrame(columns=['Nome', 'N1', 'N2', 'N3'])
+    
+    novo_aluno = pd.DataFrame([{'Nome': nome, 'N1': n1, 'N2': n2, 'N3': n3}])
+    dados = pd.concat([dados, novo_aluno], ignore_index=True)
+    
+    salvar_em_planilha('notas.xlsx', dados)
+    print(f"Aluno {nome} adicionado com sucesso!")
+
+def classificar_alunos():
+    dados = ler_planilha('notas.xlsx')
+    
+    if dados.empty:
+        print("Não há dados de alunos para classificar.")
+        return
+    
+    aprovados = []
+    exame = []
+    reprovados = []
+    
+    for _, aluno in dados.iterrows():
+        media = calcular_media(aluno['N1'], aluno['N2'], aluno['N3'])
+        
+        if media >= 7:
+            aprovados.append({'Nome': aluno['Nome'], 'Média': f'{media:.2f}'})
+        elif media >= 5:
+            exame.append({'Nome': aluno['Nome'], 'Média': f'{media:.2f}'})
+        else:
+            reprovados.append({'Nome': aluno['Nome'], 'Média': f'{media:.2f}'})
+    
+    salvar_em_planilha('aprovados.xlsx', aprovados)
+    salvar_em_planilha('exame.xlsx', exame)
+    salvar_em_planilha('reprovados.xlsx', reprovados)
+    print("Alunos classificados com sucesso!")
+
+def exame_de_aluno():
+    dados_exame = ler_planilha('exame.xlsx')
+    
+    if dados_exame.empty:
+        print("Não há alunos para exame.")
+        return
+    
+    aprovados = ler_planilha('aprovados.xlsx')
+    reprovados = ler_planilha('reprovados.xlsx')
+    
+    for _, aluno in dados_exame.iterrows():
+        while True:
+            try:
+                nota_exame = float(input(f"Informe a nota do exame do aluno {aluno['Nome']}: "))
+                break
+            except ValueError:
+                print(f"Nota inválida para o aluno {aluno['Nome']}. Por favor, insira um valor numérico.")
+        
+        media = (nota_exame + float(aluno['Média'])) / 2
+        if media >= 5:
+            aprovados = aprovados.append({'Nome': aluno['Nome'], 'Média': f'{media:.2f}', 'Status': 'Aprovado após exame'}, ignore_index=True)
+        else:
+            reprovados = reprovados.append({'Nome': aluno['Nome'], 'Média': f'{media:.2f}', 'Status': 'Reprovado após exame'}, ignore_index=True)
+    
+    salvar_em_planilha('aprovados.xlsx', aprovados)
+    salvar_em_planilha('reprovados.xlsx', reprovados)
+    print("Notas de exame registradas com sucesso!")
+
+def exibir_resultados():
+    aprovados = ler_planilha('aprovados.xlsx')
+    reprovados = ler_planilha('reprovados.xlsx')
+    
+    print("\nAlunos Aprovados:")
+    if not aprovados.empty:
+        for _, aluno in aprovados.iterrows():
+            print(f"Aluno: {aluno['Nome']} - Média: {aluno['Média']}")
+    
+    print("\nAlunos Reprovados:")
+    if not reprovados.empty:
+        for _, aluno in reprovados.iterrows():
+            print(f"Aluno: {aluno['Nome']} - Média: {aluno['Média']}")
+
+def main():
+    while True:
+        print("\nEscolha uma opção:")
+        print("1 - Adicionar aluno")
+        print("2 - Classificar alunos")
+        print("3 - Registrar nota de exame")
+        print("4 - Exibir resultados")
+        print("5 - Sair")
+        
+        try:
+            opcao = int(input("Opção: "))
+        except ValueError:
+            print("Por favor, digite um número válido.")
+            continue
+        
+        if opcao == 1:
+            adicionar_aluno()
+        elif opcao == 2:
+            classificar_alunos()
+        elif opcao == 3:
+            exame_de_aluno()
+        elif opcao == 4:
+            exibir_resultados()
+        elif opcao == 5:
+            print("Saindo...")
+            break
+        else:
+            print("Opção inválida. Por favor, escolha uma opção válida.")
+
+if __name__ == "__main__":
+    main()
+
+
+# Alterações e Melhorias:
+
+
+# - A função salvar_em_planilha() foi criada para salvar dados em arquivos .xlsx usando o pandas.
+
+# - A função ler_planilha() foi criada para ler os dados de arquivos .xlsx. Se o arquivo não existir, ele retorna vazio.
+
+# - Para garantir que as entradas de notas sejam numéricas, o código agora solicita que o usuário insira um valor numérico 
+# válido para as notas e para o exame.
+
+# - O tratamento de erros também foi adicionado ao salvar e ler arquivos Excel.
+
+# - O código foi organizado em funções reutilizáveis: adicionar_aluno(), classificar_alunos(), exame_de_aluno(), 
+# exibir_resultados(), e main() para facilitar a manutenção e legibilidade.
+
+# - Agora, média dos alunos é exibida com duas casas decimais, usando a formatação f'{media:.2f}'.
+
+# - O código de leitura e escrita de arquivos foi encapsulado nas funções ler_planilha() e salvar_em_planilha(), 
+# permitindo reutilização.
+
+# - Não sabia como usar a biblioteca pandas, pedi ajuda para o chatgpt, me ensinar a como usar e para qual finalidade. Também, gosto
+# muito de usar ele para organizar os códigos, organizar a ordem das funções, mesmo sendo irrelevante a ordem, fica muito mais fácil
+# de identificar erros/fazer alterações ou manutenção do código quando você tem uma 'linha do tempo'.
