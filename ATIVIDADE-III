@@ -171,5 +171,5 @@ if __name__ == "__main__":
 # permitindo reutilização.
 
 # - Não sabia como usar a biblioteca pandas, pedi ajuda para o chatgpt, me ensinar a como usar e para qual finalidade. Também, gosto
-# muito de usar ele para organizar os códigos, organizar a ordem das funções, mesmo sendo irrelevante a ordem, fica muito mais fácil
+# muito de usar ele para organizar os códigos, organizar a ordem dos def's, mesmo sendo irrelevante a ordem, fica muito mais fácil
 # de identificar erros/fazer alterações ou manutenção do código quando você tem uma 'linha do tempo'.
