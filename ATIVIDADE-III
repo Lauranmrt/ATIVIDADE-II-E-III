@@ -95,9 +95,9 @@ def exame_de_aluno():
         
         media = (nota_exame + float(aluno['Média'])) / 2
         if media >= 5:
-            aprovados = aprovados.append({'Nome': aluno['Nome'], 'Média': f'{media:.2f}', 'Status': 'Aprovado após exame'}, ignore_index=True)
+            aprovados = pd.concat([aprovados, pd.DataFrame([{'Nome': aluno['Nome'], 'Média': f'{media:.2f}', 'Status': 'Aprovado após exame'}])], ignore_index=True)
         else:
-            reprovados = reprovados.append({'Nome': aluno['Nome'], 'Média': f'{media:.2f}', 'Status': 'Reprovado após exame'}, ignore_index=True)
+            reprovados = pd.concat([reprovados, pd.DataFrame([{'Nome': aluno['Nome'], 'Média': f'{media:.2f}', 'Status': 'Reprovado após exame'}])], ignore_index=True)
     
     salvar_em_planilha('aprovados.xlsx', aprovados)
     salvar_em_planilha('reprovados.xlsx', reprovados)
